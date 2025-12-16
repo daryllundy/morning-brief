@@ -35,13 +35,13 @@ feeds:
     rss:
       - https://aws.amazon.com/blogs/architecture/feed/
       - https://aws.amazon.com/blogs/aws/feed/
-      - https://cloud.google.com/blog/topics/devops-sre/rss.xml
       - https://azure.microsoft.com/en-us/blog/feed/
       - https://netflixtechblog.com/feed
       - https://engineering.atspotify.com/feed/
       - https://slack.engineering/feed/
       - https://dropbox.tech/feed
       # REMOVED: https://eng.uber.com/feed/ - no longer provides RSS feed
+      # REMOVED: https://cloud.google.com/blog/topics/devops-sre/rss.xml - invalid RSS format
 
   # -------------------------------------------------
   # TIER 3 — DEVOPS / SRE / OBSERVABILITY
@@ -54,11 +54,11 @@ feeds:
       - https://grafana.com/blog/index.xml
       - https://prometheus.io/blog/feed.xml
       # REMOVED: https://www.datadoghq.com/blog/feed/ - no longer provides RSS feed
-      - https://www.gremlin.com/blog/feed
+      # REMOVED: https://www.gremlin.com/blog/feed - feed not found (404)
       - https://incident.io/blog.xml
       - https://www.lastweekinaws.com/feed/
-      - https://www.hashicorp.com/blog/products/terraform/feed
-      - https://www.hashicorp.com/blog/products/vault/feed
+      # REMOVED: https://www.hashicorp.com/blog/products/terraform/feed - rate limited (429)
+      # REMOVED: https://www.hashicorp.com/blog/products/vault/feed - rate limited (429)
       - https://kubernetes.io/feed.xml
       - https://blog.kubesimplify.com/rss.xml
       - https://about.gitlab.com/atom.xml
@@ -75,9 +75,9 @@ feeds:
       - https://blog.google/technology/ai/rss/
       - https://www.microsoft.com/en-us/research/blog/feed/
       - https://huggingface.co/blog/feed.xml
-      - https://wandb.ai/articles.rss
       - https://rss.flightcast.com/vgnxzgiwwzwke85ym53fjnzu.xml  # Latent Space podcast
       # REMOVED: https://www.evidentlyai.com/blog/rss.xml - no longer provides RSS feed
+      # REMOVED: https://wandb.ai/articles.rss - malformed XML
 
   # -------------------------------------------------
   # TIER 5 — RESEARCH / ACADEMIC (FOLLOW-UP ONLY)
@@ -101,7 +101,7 @@ feeds:
     rss:
       # REMOVED: https://www.cisa.gov/known-exploited-vulnerabilities-catalog.xml - not an RSS feed
       - https://www.cisa.gov/news.xml
-      - https://security.googleblog.com/feeds/posts/default
+      - https://feeds.feedburner.com/GoogleOnlineSecurityBlog
       - https://blog.talosintelligence.com/rss/
       # REMOVED: https://aws.amazon.com/security/security-bulletins/rss.xml - feed no longer available
 
@@ -112,7 +112,6 @@ feeds:
     weight: 4
     description: "Security research, cloud & container security"
     rss:
-      - https://cloud.google.com/blog/topics/threat-intelligence/rss.xml
       - https://azure.microsoft.com/en-us/blog/topics/security/feed/
       # REMOVED: https://www.aquasec.com/blog/feed/ - feed no longer available
       - https://www.snyk.io/blog/feed/
@@ -130,6 +129,7 @@ feeds:
       - https://news.sophos.com/en-us/feed/
       - https://danielmiessler.com/feed/
       - https://blog.sucuri.net/feed
+      # REMOVED: https://cloud.google.com/blog/topics/threat-intelligence/rss.xml - invalid RSS format
 
 # -------------------------------------------------
 # CRAWL-ONLY SOURCES (NO RSS)

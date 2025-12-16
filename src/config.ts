@@ -10,19 +10,35 @@ export const TIER_RULES: Record<string, { cap: number; rotate: boolean }> = {
 
 export const SOURCE_COOLDOWN_DAYS = 2;
 
-export const SECURITY_KEYWORDS = [
+export const CVE_KEYWORDS = [
   "cve-",
+  "vulnerability",
   "zero-day",
+  "0-day",
+  "zero day",
   "actively exploited",
+  "critical vulnerability",
+  "high severity",
+  "security advisory",
+  "security bulletin",
+  "patch now",
+  "urgent patch",
+  "exploit",
+];
+
+export const SECURITY_KEYWORDS = [
   "rce",
+  "remote code execution",
   "privilege escalation",
-  "supply chain",
-  "kubernetes",
+  "supply chain attack",
   "container escape",
-  "iam",
-  "oauth",
-  "misconfiguration",
+  "ransomware",
+  "data breach",
   "breach",
   "incident",
+  "compromised",
+  "malware",
+  "backdoor",
+  "authentication bypass",
 ];
 

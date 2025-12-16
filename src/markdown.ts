@@ -5,14 +5,14 @@ mkdirSync("output", { recursive: true });
 export function writeMarkdown(
   rss: any[],
   crawled: any[],
-  followups: any[]
+  followups: { cveItems: any[]; securityItems: any[] }
 ) {
   const date = new Date().toISOString().split("T")[0];
   const path = `output/morning_brief_${date}.md`;
 
   let md = `# Morning AI / Infra / DevOps / Infosec Brief — ${date}
 
-**Scope:** Last 18 hours  
+**Scope:** Last 18 hours
 **Mode:** Detection, not analysis
 
 ---
@@ -30,13 +30,32 @@ export function writeMarkdown(
 `;
   }
 
-  if (followups.length) {
+  if (followups.cveItems.length) {
     md += `---
 
-## 🔖 Follow-Up Candidates (Human Review)
+## 🚨 CVE & Critical Vulnerabilities
+
+**PRIORITY: Review these immediately for patching requirements**
+
 `;
-    for (const f of followups) {
-      md += `- ${f.title} → ${f.link}\n`;
+    for (const f of followups.cveItems) {
+      md += `### ${f.title}
+- **Source:** ${f.source}
+- **Link:** ${f.link}
+- **Tier:** ${f.tier}
+- **Published:** ${f.published.toISOString()}
+
+`;
+    }
+  }
+
+  if (followups.securityItems.length) {
+    md += `---
+
+## 🔖 Security Incidents & Threats (Human Review)
+`;
+    for (const f of followups.securityItems) {
+      md += `- ${f.title} → ${f.link} (${f.source})\n`;
     }
     md += "\n";
   }
