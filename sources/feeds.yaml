@@ -132,20 +132,31 @@ feeds:
       # REMOVED: https://cloud.google.com/blog/topics/threat-intelligence/rss.xml - invalid RSS format
 
 # -------------------------------------------------
-# CRAWL-ONLY SOURCES (NO RSS)
+# SCRAPE-ONLY SOURCES (NO RSS)
+# Single-page extraction for sites without RSS feeds
+#
+# Credit Optimization:
+# - Local scraping (cheerio) is tried first (FREE)
+# - Firecrawl is used only if local fails OR requireFirecrawl: true (1 credit)
+# - Set requireFirecrawl: true for JS-heavy sites that need browser rendering
 # -------------------------------------------------
-crawl_sources:
+scrape_sources:
   weight: 1
-  description: "Reference & context reservoirs"
+  description: "Reference & context reservoirs (scraped from homepages)"
   urls:
-    # REMOVED: https://www.perplexity.ai/discover - blocks automated requests (403)
+    # Static sites - local scraping works well (FREE)
     - https://www.anthropic.com/news
     - https://deepmind.google/research
     - https://www.anthropic.com/research
     - https://docs.cloud.google.com/architecture
     - https://aws.amazon.com/architecture/
     - https://learn.microsoft.com/en-us/azure/architecture/
-    - https://nvd.nist.gov/vuln
-    - https://attack.mitre.org/
-    - https://www.cisa.gov/news-events/cybersecurity-advisories
+
+    # Government sites - may need Firecrawl if local fails
+    - url: https://nvd.nist.gov/vuln
+      requireFirecrawl: false  # Try local first
+    - url: https://attack.mitre.org/
+      requireFirecrawl: false  # Try local first
+    - url: https://www.cisa.gov/news-events/cybersecurity-advisories
+      requireFirecrawl: false  # Try local first
 

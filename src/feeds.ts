@@ -15,9 +15,18 @@ export function loadFeeds() {
     })
   );
 
+  // Normalize scrape URLs to support both string and object format
+  const scrapeConfig = doc.scrape_sources || doc.crawl_sources;
+  const scrapeUrls = scrapeConfig?.urls?.map((item: any) => {
+    if (typeof item === 'string') {
+      return { url: item, requireFirecrawl: false };
+    }
+    return { url: item.url, requireFirecrawl: item.requireFirecrawl || false };
+  }) || [];
+
   return {
     tiers,
-    crawl: doc.crawl_sources,
+    scrape: { urls: scrapeUrls },
     meta: doc.meta,
   };
 }

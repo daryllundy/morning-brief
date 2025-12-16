@@ -40,7 +40,7 @@ It's a linear pipeline that runs wherever you install it:
 
 1.  **Wake Up**: The script runs (manually or via scheduler).
 2.  **Read the Map**: It loads `sources/feeds.yaml` to know where to look.
-3.  **Gather**: It fetches the latest posts from RSS feeds and crawls non-RSS sites using [Firecrawl](https://firecrawl.dev) (if API key is set) with automatic fallback to local HTML parsing via cheerio.
+3.  **Gather**: It fetches the latest posts from RSS feeds and scrapes non-RSS sites using [Firecrawl](https://firecrawl.dev)'s scrape endpoint (if API key is set) with automatic fallback to local HTML parsing via cheerio.
 4.  **Curate**: It applies my "Tier System" logic:
     *   *Security Critical*: Always show me these (CVEs, 0-days, major breaches).
     *   *Core Tech*: Cap at 8 articles.
@@ -63,7 +63,7 @@ graph LR
 
 - **100% RSS Success Rate** - Smart retry logic, XML sanitization, SSL handling
 - **Dedicated CVE Section** - Critical vulnerabilities surfaced immediately
-- **Dual Crawl Strategy** - Firecrawl API with cheerio fallback for blocked sites
+- **Dual Scrape Strategy** - Firecrawl scrape endpoint with cheerio fallback for blocked sites
 - **Portable** - Works anywhere you clone it, no hardcoded paths
 - **Smart Curation** - Tier-based filtering with source rotation
 - **Scheduled or Manual** - Run on-demand or daily at 5:00 AM
@@ -72,7 +72,7 @@ graph LR
 
 *   **RSS is chaotic**: I learned the hard way that no two RSS feeds are formatted exactly alike. Handling dates and mismatched tags was... an adventure.
 *   **Bun is fast**: I'm used to Node.js, but Bun's startup time for a CLI tool like this is instant. Plus, having TypeScript support out of the box is a game changer for "weekend hacking."
-*   **Web scraping needs resilience**: Many sites block crawling services like Firecrawl, but basic HTML fetching with cheerio works great as a fallback. The dual-strategy approach (try Firecrawl, fall back to local) ensures content always gets through.
+*   **Web scraping needs resilience**: Many sites block scraping services, but using Firecrawl's scrape endpoint (not crawl) for single-page extraction with cheerio fallback works great. The dual-strategy approach ensures content always gets through.
 
 ## Tech Stack 🛠️
 
@@ -88,12 +88,12 @@ graph LR
 ## Configuration 📝
 
 Edit `sources/feeds.yaml` to customize:
-- RSS feed sources (organized by tier)
-- Crawl-only URLs
+- RSS feed sources (organized by tier) - **Always FREE**
+- Scrape-only URLs (single-page extraction) - **Smart fallback: FREE local scraping first, Firecrawl (1 credit) as fallback**
 - Article caps per tier
 - Time window (default: 18 hours)
 
-See `CLAUDE.md` for detailed architecture documentation.
+See `CLAUDE.md` for detailed architecture and `CREDITS.md` for Firecrawl optimization strategies.
 
 ## Output Format 📄
 
@@ -101,7 +101,7 @@ Daily briefs are generated in `output/` with sections:
 1. **Headlines** - All selected articles with metadata
 2. **🚨 CVE & Critical Vulnerabilities** - Immediate review required
 3. **🔖 Security Incidents & Threats** - Secondary security items
-4. **Crawled Sources** - Full content from non-RSS sources
+4. **Scraped Sources** - Full content from non-RSS sources (single-page extraction)
 
 ## Let's Connect 🤝
 

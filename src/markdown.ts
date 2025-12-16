@@ -4,7 +4,7 @@ mkdirSync("output", { recursive: true });
 
 export function writeMarkdown(
   rss: any[],
-  crawled: any[],
+  scraped: any[],
   followups: { cveItems: any[]; securityItems: any[] }
 ) {
   const date = new Date().toISOString().split("T")[0];
@@ -60,14 +60,14 @@ export function writeMarkdown(
     md += "\n";
   }
 
-  if (crawled.length) {
+  if (scraped.length) {
     md += `---
 
-## Crawled Sources
+## Scraped Sources
 `;
-    for (const c of crawled) {
-      md += `### ${c.title}
-${c.content}
+    for (const s of scraped) {
+      md += `### ${s.title}
+${s.content}
 
 ---
 `;

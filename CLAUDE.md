@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Morning Brief is an automated news aggregation system that generates daily AI/Infrastructure/DevOps/InfoSec briefings. It combines RSS feed collection with web crawling to curate relevant technical content from tiered sources.
+Morning Brief is an automated news aggregation system that generates daily AI/Infrastructure/DevOps/InfoSec briefings. It combines RSS feed collection with web scraping to curate relevant technical content from tiered sources.
 
 ## Running the Application
 
@@ -19,7 +19,14 @@ bun run src/index.ts
 ./cron.sh
 ```
 
-The application can optionally use the `FIRECRAWL_API_KEY` environment variable for enhanced web crawling. If not set, the system automatically falls back to local HTML parsing using cheerio.
+The application can optionally use the `FIRECRAWL_API_KEY` environment variable for enhanced web scraping via Firecrawl's scrape endpoint.
+
+**Credit Optimization:** The system uses a smart fallback strategy to minimize Firecrawl credit usage:
+1. Tries local HTML parsing with cheerio first (FREE)
+2. Only uses Firecrawl (1 credit) if local scraping fails or URL is marked as `requireFirecrawl: true`
+3. Logs credit usage per run for monitoring
+
+See `CREDITS.md` for detailed credit optimization strategies.
 
 ## Architecture
 
@@ -27,11 +34,11 @@ The application can optionally use the `FIRECRAWL_API_KEY` environment variable 
 
 The application follows a linear pipeline:
 
-1. **Load Configuration** (`loadFeeds()`) - Parses `sources/feeds.yaml` to get tiered RSS feeds and crawl targets
+1. **Load Configuration** (`loadFeeds()`) - Parses `sources/feeds.yaml` to get tiered RSS feeds and scrape targets
 2. **Collect RSS** (`collectRSS()`) - Fetches articles from all RSS feeds within the configured time window (18 hours default)
 3. **Select Articles** (`selectArticles()`) - Applies tier-based capping and source rotation rules
 4. **Generate Follow-ups** (`generateFollowUps()`) - Flags security-critical items based on keywords
-5. **Crawl URLs** (`crawl()`) - Attempts Firecrawl API first, falls back to local HTML parsing with cheerio if Firecrawl fails or API key is not set
+5. **Scrape URLs** (`scrape()`) - Uses Firecrawl's scrape endpoint for single-page extraction with `onlyMainContent: true`, falls back to local HTML parsing with cheerio if Firecrawl fails or API key is not set
 6. **Write Output** (`writeMarkdown()`) - Generates markdown brief in `output/`
 
 ### Tier System (config.ts)
@@ -68,7 +75,7 @@ Articles matching security keywords are flagged for human review:
 Main configuration defining:
 - `meta.time_window_hours` - How far back to collect articles (default: 18)
 - `feeds.*` - Tier definitions with RSS feed URLs
-- `crawl_sources.urls` - Non-RSS URLs to scrape with Firecrawl
+- `scrape_sources.urls` - Non-RSS URLs to scrape (single-page extraction)
 
 ### sources/rss.txt & crawl.txt
 
@@ -78,8 +85,9 @@ Legacy feed lists (no longer actively used - feeds.yaml is the source of truth).
 
 Generated briefs are written to `output/morning_brief_{date}.md` with sections:
 - Headlines (all selected articles with metadata)
-- Follow-Up Candidates (security-flagged items)
-- Crawled Sources (full markdown content from crawled URLs)
+- CVE & Critical Vulnerabilities (high-priority security items)
+- Security Incidents & Threats (secondary security items)
+- Scraped Sources (full markdown content from scraped URLs)
 
 ## Development Notes
 
@@ -90,5 +98,6 @@ Generated briefs are written to `output/morning_brief_{date}.md` with sections:
 - Date handling via date-fns library
 - RSS parsing via rss-parser library
 - YAML parsing via js-yaml library
-- HTML parsing via cheerio library (for local web crawling fallback)
-- Web crawling uses dual-strategy: Firecrawl API (optional) with cheerio fallback
+- HTML parsing via cheerio library (for local web scraping fallback)
+- Web scraping uses dual-strategy: Firecrawl scrape endpoint (optional) with cheerio fallback
+- Firecrawl configured with `onlyMainContent: true` to strip navigation and footer noise

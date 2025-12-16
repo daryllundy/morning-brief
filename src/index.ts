@@ -1,6 +1,6 @@
 import { loadFeeds } from "./feeds";
 import { collectRSS } from "./rss";
-import { crawl } from "./firecrawl";
+import { scrape } from "./firecrawl";
 import { loadHistory, saveHistory } from "./rotation";
 import { selectArticles } from "./selection";
 import { generateFollowUps } from "./followups";
@@ -11,14 +11,14 @@ async function run() {
   log("Morning brief started");
 
   const history = loadHistory();
-  const { tiers, crawl: crawlCfg, meta } = loadFeeds();
+  const { tiers, scrape: scrapeCfg, meta } = loadFeeds();
 
   const rssRaw = await collectRSS(tiers, meta.time_window_hours);
   const selectedRSS = selectArticles(rssRaw, tiers, history);
   const followups = generateFollowUps(selectedRSS);
-  const crawled = await crawl(crawlCfg.urls);
+  const scraped = await scrape(scrapeCfg.urls);
 
-  const output = writeMarkdown(selectedRSS, crawled, followups);
+  const output = writeMarkdown(selectedRSS, scraped, followups);
 
   saveHistory(history);
   log(`Brief generated → ${output}`);

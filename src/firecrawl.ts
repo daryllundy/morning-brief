@@ -1,10 +1,10 @@
 import { log } from "./logger";
 import * as cheerio from "cheerio";
 
-const API = "https://api.firecrawl.ai/v1/scrape";
+const SCRAPE_API = "https://api.firecrawl.dev/v1/scrape";
 const KEY = process.env.FIRECRAWL_API_KEY!;
 
-async function localCrawl(url: string): Promise<string | null> {
+async function localScrape(url: string): Promise<string | null> {
   try {
     const response = await fetch(url, {
       headers: {
@@ -13,7 +13,7 @@ async function localCrawl(url: string): Promise<string | null> {
     });
 
     if (!response.ok) {
-      log(`Local crawl failed: ${url} - Status ${response.status}`);
+      log(`Local scrape failed: ${url} - Status ${response.status}`);
       return null;
     }
 
@@ -44,21 +44,45 @@ async function localCrawl(url: string): Promise<string | null> {
 
     return content || null;
   } catch (err) {
-    log(`Local crawl error: ${url} - ${err}`);
+    log(`Local scrape error: ${url} - ${err}`);
     return null;
   }
 }
 
-export async function crawl(urls: string[]) {
+export async function scrape(urlConfigs: any[]) {
   const results = [];
+  let firecrawlUsed = 0;
+  let localUsed = 0;
 
-  for (const url of urls) {
+  for (const config of urlConfigs) {
+    const url = typeof config === 'string' ? config : config.url;
+    const requireFirecrawl = typeof config === 'object' && config.requireFirecrawl;
     let success = false;
 
-    // Try Firecrawl first if API key is available
-    if (KEY) {
+    // Strategy: Try local first (free), then Firecrawl (1 credit) if needed
+    // Exception: If requireFirecrawl=true, skip local attempt
+
+    if (!requireFirecrawl) {
+      // Try local scrape first (saves Firecrawl credits)
+      const content = await localScrape(url);
+      if (content && content.length > 200) { // Ensure we got meaningful content
+        results.push({
+          title: url,
+          link: url,
+          content: content.slice(0, 4000),
+        });
+        log(`Local scrape success (0 credits): ${url}`);
+        localUsed++;
+        success = true;
+      } else {
+        log(`Local scrape insufficient (${content?.length || 0} chars), trying Firecrawl: ${url}`);
+      }
+    }
+
+    // Try Firecrawl if: local failed OR requireFirecrawl=true
+    if (!success && KEY) {
       try {
-        const res = await fetch(API, {
+        const res = await fetch(SCRAPE_API, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${KEY}`,
@@ -67,6 +91,7 @@ export async function crawl(urls: string[]) {
           body: JSON.stringify({
             url,
             formats: ["markdown"],
+            onlyMainContent: true,
           }),
         });
 
@@ -78,32 +103,23 @@ export async function crawl(urls: string[]) {
             link: url,
             content: json.data.markdown.slice(0, 4000),
           });
-          log(`Firecrawl success: ${url}`);
+          firecrawlUsed++;
+          log(`Firecrawl scrape success (1 credit): ${url}`);
           success = true;
         } else {
-          log(`Firecrawl failed: ${url} - Status ${res.status}, falling back to local crawl`);
+          log(`Firecrawl scrape failed: ${url} - Status ${res.status}`);
         }
       } catch (err) {
-        log(`Firecrawl error: ${url} - ${err}, falling back to local crawl`);
+        log(`Firecrawl scrape error: ${url} - ${err}`);
       }
     }
 
-    // Fall back to local crawl if Firecrawl failed or no API key
     if (!success) {
-      const content = await localCrawl(url);
-      if (content) {
-        results.push({
-          title: url,
-          link: url,
-          content: content.slice(0, 4000),
-        });
-        log(`Local crawl success: ${url}`);
-      } else {
-        log(`Both Firecrawl and local crawl failed: ${url}`);
-      }
+      log(`All scrape methods failed: ${url}`);
     }
   }
 
+  log(`Scraping complete: ${firecrawlUsed} Firecrawl credits used, ${localUsed} local scrapes (free)`);
   return results;
 }
 
