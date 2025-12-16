@@ -11,7 +11,9 @@
       "WebFetch(domain:attack.mitre.org)",
       "WebFetch(domain:www.cisa.gov)",
       "WebFetch(domain:docs.cloud.google.com)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(printenv:*)",
+      "Bash(bun add:*)"
     ]
   }
 }

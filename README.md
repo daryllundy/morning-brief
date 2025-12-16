@@ -22,7 +22,7 @@ It's a linear pipeline that runs on my laptop (or a cheap VPS):
 
 1.  **Wake Up**: The script runs (manually or via cron).
 2.  **Read the Map**: It loads `sources/feeds.yaml` to know where to look.
-3.  **Gather**: It fetches the latest posts from RSS feeds and uses [Firecrawl](https://firecrawl.dev) for the tricky sites.
+3.  **Gather**: It fetches the latest posts from RSS feeds and crawls non-RSS sites using [Firecrawl](https://firecrawl.dev) (if API key is set) with automatic fallback to local HTML parsing via cheerio.
 4.  **Curate**: It applies my "Tier System" logic:
     *   *Security Critical*: Always show me these (0-days, major breaches).
     *   *Core Tech*: Cap at 8 articles.
@@ -43,6 +43,7 @@ graph LR
 
 *   **RSS is chaotic**: I learned the hard way that no two RSS feeds are formatted exactly alike. Handling dates and mismatched tags was... an adventure.
 *   **Bun is fast**: I'm used to Node.js, but Bun's startup time for a CLI tool like this is instant. Plus, having TypeScript support out of the box is a game changer for "weekend hacking."
+*   **Web scraping needs resilience**: Many sites block crawling services like Firecrawl, but basic HTML fetching with cheerio works great as a fallback. The dual-strategy approach (try Firecrawl, fall back to local) ensures content always gets through.
 
 ## Running the Lab 🧪
 
@@ -61,7 +62,7 @@ Works on my machine, and it should work on yours if you have Bun installed!
 
 3.  **Configure:**
     *   Check `sources/feeds.yaml` to see the structure.
-    *   (Optional) Set `FIRECRAWL_API_KEY` in your environment if you want to use the web crawler features.
+    *   (Optional) Set `FIRECRAWL_API_KEY` in your environment to use Firecrawl for web crawling. If not set, the system automatically falls back to local HTML parsing.
 
 4.  **Run it:**
     ```bash
@@ -76,6 +77,7 @@ Works on my machine, and it should work on yours if you have Bun installed!
 *   **Language:** TypeScript
 *   **Core Logic:**
     *   `rss-parser`: For taming the RSS beast.
+    *   `cheerio`: For parsing HTML when crawling websites.
     *   `js-yaml`: For friendly configuration files.
     *   `date-fns`: Because time zones are hard.
     *   `node-cron`: For scheduling (when running as a daemon).

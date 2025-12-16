@@ -12,14 +12,14 @@ Morning Brief is an automated news aggregation system that generates daily AI/In
 # Install dependencies
 bun install
 
-# Run the brief generator (requires FIRECRAWL_API_KEY)
+# Run the brief generator
 bun run src/index.ts
 
 # Or use the cron script (update paths and API key first)
 ./cron.sh
 ```
 
-The application requires the `FIRECRAWL_API_KEY` environment variable to be set for web crawling functionality.
+The application can optionally use the `FIRECRAWL_API_KEY` environment variable for enhanced web crawling. If not set, the system automatically falls back to local HTML parsing using cheerio.
 
 ## Architecture
 
@@ -31,7 +31,7 @@ The application follows a linear pipeline:
 2. **Collect RSS** (`collectRSS()`) - Fetches articles from all RSS feeds within the configured time window (18 hours default)
 3. **Select Articles** (`selectArticles()`) - Applies tier-based capping and source rotation rules
 4. **Generate Follow-ups** (`generateFollowUps()`) - Flags security-critical items based on keywords
-5. **Crawl URLs** (`crawl()`) - Uses Firecrawl API to scrape non-RSS sources
+5. **Crawl URLs** (`crawl()`) - Attempts Firecrawl API first, falls back to local HTML parsing with cheerio if Firecrawl fails or API key is not set
 6. **Write Output** (`writeMarkdown()`) - Generates markdown brief in `output/`
 
 ### Tier System (config.ts)
@@ -90,3 +90,5 @@ Generated briefs are written to `output/morning_brief_{date}.md` with sections:
 - Date handling via date-fns library
 - RSS parsing via rss-parser library
 - YAML parsing via js-yaml library
+- HTML parsing via cheerio library (for local web crawling fallback)
+- Web crawling uses dual-strategy: Firecrawl API (optional) with cheerio fallback
