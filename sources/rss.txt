@@ -1,0 +1,10 @@
+https://hnrss.org/frontpage
+https://blog.cloudflare.com/rss/
+https://aws.amazon.com/blogs/opensource/feed/
+https://aws.amazon.com/blogs/architecture/feed/
+https://kubernetes.io/feed.xml
+https://openai.com/blog/rss.xml
+https://www.anthropic.com/rss.xml
+https://engineering.atspotify.com/feed/
+https://netflixtechblog.com/feed
+

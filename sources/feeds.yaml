@@ -1,0 +1,136 @@
+meta:
+  purpose: "Morning AI / Infra / DevOps / Infosec brief"
+  mode: "Detection, not analysis"
+  time_window_hours: 18
+
+weights:
+  tier_1_core: 5
+  tier_2_platform: 4
+  tier_3_devops: 3
+  tier_4_ai_systems: 2
+  tier_5_research: 1
+  tier_security_critical: 6
+  tier_security_general: 4
+  crawl_only: 1
+
+feeds:
+
+  # -------------------------------------------------
+  # TIER 1 — CORE SIGNAL
+  # -------------------------------------------------
+  tier_1_core:
+    weight: 5
+    description: "Broad ecosystem signal and infra anchors"
+    rss:
+      - https://hnrss.org/frontpage
+      - https://www.cncf.io/feed/
+      - https://blog.cloudflare.com/rss/
+
+  # -------------------------------------------------
+  # TIER 2 — CLOUD & PLATFORM ENGINEERING
+  # -------------------------------------------------
+  tier_2_platform:
+    weight: 4
+    description: "Cloud architecture, reliability, scale"
+    rss:
+      - https://aws.amazon.com/blogs/architecture/feed/
+      - https://cloud.google.com/blog/topics/devops-sre/rss.xml
+      - https://azure.microsoft.com/en-us/blog/feed/
+      - https://netflixtechblog.com/feed
+      - https://engineering.atspotify.com/feed/
+      - https://slack.engineering/feed/
+      - https://dropbox.tech/feed
+      - https://eng.uber.com/feed/
+
+  # -------------------------------------------------
+  # TIER 3 — DEVOPS / SRE / OBSERVABILITY
+  # -------------------------------------------------
+  tier_3_devops:
+    weight: 3
+    description: "Hands-on infra, tooling, incidents"
+    rss:
+      - https://blog.gruntwork.io/feed
+      - https://grafana.com/blog/rss.xml
+      - https://prometheus.io/blog/feed.xml
+      - https://www.datadoghq.com/blog/feed/
+      - https://www.gremlin.com/blog/rss.xml
+      - https://incident.io/blog/rss.xml
+      - https://www.lastweekinaws.com/feed/
+      - https://www.hashicorp.com/blog/products/terraform/feed
+      - https://www.hashicorp.com/blog/products/vault/feed
+      - https://kubernetes.io/feed.xml
+      - https://kubesimplify.com/rss.xml
+
+  # -------------------------------------------------
+  # TIER 4 — AI SYSTEMS & TOOLING
+  # -------------------------------------------------
+  tier_4_ai_systems:
+    weight: 2
+    description: "AI as infrastructure, not hype"
+    rss:
+      - https://openai.com/news/rss.xml
+      - https://huggingface.co/blog/feed.xml
+      - https://wandb.ai/articles.rss
+      - https://www.latent.space/rss
+      - https://www.evidentlyai.com/blog/rss.xml
+
+  # -------------------------------------------------
+  # TIER 5 — RESEARCH / ACADEMIC (FOLLOW-UP ONLY)
+  # -------------------------------------------------
+  tier_5_research:
+    weight: 1
+    description: "Deep research, low immediacy"
+    rss:
+      - http://bair.berkeley.edu/blog/feed.xml
+      - https://ai.stanford.edu/blog/feed.xml
+      - https://blog.ml.cmu.edu/feed/
+      - https://ruder.io/rss/index.rss
+
+  # -------------------------------------------------
+  # SECURITY — CRITICAL (CVEs, breaches, advisories)
+  # -------------------------------------------------
+  tier_security_critical:
+    weight: 6
+    description: "Actively exploited vulns, major incidents"
+    rss:
+      - https://www.cisa.gov/known-exploited-vulnerabilities-catalog.xml
+      - https://www.cisa.gov/news.xml
+      - https://security.googleblog.com/feeds/posts/default
+      - https://aws.amazon.com/security/security-bulletins/rss.xml
+
+  # -------------------------------------------------
+  # SECURITY — GENERAL (analysis & reporting)
+  # -------------------------------------------------
+  tier_security_general:
+    weight: 4
+    description: "Security research, cloud & container security"
+    rss:
+      - https://cloud.google.com/blog/topics/threat-intelligence/rss.xml
+      - https://azure.microsoft.com/en-us/blog/topics/security/feed/
+      - https://www.aquasec.com/blog/feed/
+      - https://www.snyk.io/blog/rss/
+      - https://www.tenable.com/blog/feed
+      - https://www.rapid7.com/blog/rss/
+      - https://unit42.paloaltonetworks.com/feed/
+      - https://krebsonsecurity.com/feed/
+      - https://www.bleepingcomputer.com/feed/
+      - https://therecord.media/feed/
+
+# -------------------------------------------------
+# CRAWL-ONLY SOURCES (NO RSS)
+# -------------------------------------------------
+crawl_sources:
+  weight: 1
+  description: "Reference & context reservoirs"
+  urls:
+    - https://www.perplexity.ai/discover
+    - https://www.anthropic.com/news
+    - https://deepmind.google/research
+    - https://www.anthropic.com/research
+    - https://cloud.google.com/architecture/
+    - https://aws.amazon.com/architecture/
+    - https://learn.microsoft.com/en-us/azure/architecture/
+    - https://nvd.nist.gov/vuln
+    - https://attack.mitre.org/
+    - https://www.cisa.gov/alerts
+
