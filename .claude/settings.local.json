@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "WebFetch(domain:blog.gruntwork.io)",
+      "WebFetch(domain:grafana.com)",
+      "WebFetch(domain:incident.io)",
+      "WebFetch(domain:kubesimplify.com)",
+      "WebFetch(domain:aws.amazon.com)",
+      "WebFetch(domain:nvd.nist.gov)",
+      "WebFetch(domain:attack.mitre.org)",
+      "WebFetch(domain:www.cisa.gov)",
+      "WebFetch(domain:docs.cloud.google.com)",
+      "Bash(bun run:*)"
+    ]
+  }
+}

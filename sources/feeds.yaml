@@ -34,13 +34,14 @@ feeds:
     description: "Cloud architecture, reliability, scale"
     rss:
       - https://aws.amazon.com/blogs/architecture/feed/
+      - https://aws.amazon.com/blogs/aws/feed/
       - https://cloud.google.com/blog/topics/devops-sre/rss.xml
       - https://azure.microsoft.com/en-us/blog/feed/
       - https://netflixtechblog.com/feed
       - https://engineering.atspotify.com/feed/
       - https://slack.engineering/feed/
       - https://dropbox.tech/feed
-      - https://eng.uber.com/feed/
+      # REMOVED: https://eng.uber.com/feed/ - no longer provides RSS feed
 
   # -------------------------------------------------
   # TIER 3 — DEVOPS / SRE / OBSERVABILITY
@@ -49,17 +50,19 @@ feeds:
     weight: 3
     description: "Hands-on infra, tooling, incidents"
     rss:
-      - https://blog.gruntwork.io/feed
-      - https://grafana.com/blog/rss.xml
+      # REMOVED: https://blog.gruntwork.io/feed - no longer provides RSS feed
+      - https://grafana.com/blog/index.xml
       - https://prometheus.io/blog/feed.xml
-      - https://www.datadoghq.com/blog/feed/
-      - https://www.gremlin.com/blog/rss.xml
-      - https://incident.io/blog/rss.xml
+      # REMOVED: https://www.datadoghq.com/blog/feed/ - no longer provides RSS feed
+      - https://www.gremlin.com/blog/feed
+      - https://incident.io/blog.xml
       - https://www.lastweekinaws.com/feed/
       - https://www.hashicorp.com/blog/products/terraform/feed
       - https://www.hashicorp.com/blog/products/vault/feed
       - https://kubernetes.io/feed.xml
-      - https://kubesimplify.com/rss.xml
+      - https://blog.kubesimplify.com/rss.xml
+      - https://about.gitlab.com/atom.xml
+      - https://tailscale.com/blog/index.xml
 
   # -------------------------------------------------
   # TIER 4 — AI SYSTEMS & TOOLING
@@ -69,10 +72,12 @@ feeds:
     description: "AI as infrastructure, not hype"
     rss:
       - https://openai.com/news/rss.xml
+      - https://blog.google/technology/ai/rss/
+      - https://www.microsoft.com/en-us/research/blog/feed/
       - https://huggingface.co/blog/feed.xml
       - https://wandb.ai/articles.rss
-      - https://www.latent.space/rss
-      - https://www.evidentlyai.com/blog/rss.xml
+      - https://rss.flightcast.com/vgnxzgiwwzwke85ym53fjnzu.xml  # Latent Space podcast
+      # REMOVED: https://www.evidentlyai.com/blog/rss.xml - no longer provides RSS feed
 
   # -------------------------------------------------
   # TIER 5 — RESEARCH / ACADEMIC (FOLLOW-UP ONLY)
@@ -81,10 +86,11 @@ feeds:
     weight: 1
     description: "Deep research, low immediacy"
     rss:
-      - http://bair.berkeley.edu/blog/feed.xml
+      - https://bair.berkeley.edu/blog/feed.xml
       - https://ai.stanford.edu/blog/feed.xml
       - https://blog.ml.cmu.edu/feed/
-      - https://ruder.io/rss/index.rss
+      - https://www.technologyreview.com/feed/
+      # REMOVED: https://ruder.io/rss/index.rss - feed no longer available
 
   # -------------------------------------------------
   # SECURITY — CRITICAL (CVEs, breaches, advisories)
@@ -93,10 +99,11 @@ feeds:
     weight: 6
     description: "Actively exploited vulns, major incidents"
     rss:
-      - https://www.cisa.gov/known-exploited-vulnerabilities-catalog.xml
+      # REMOVED: https://www.cisa.gov/known-exploited-vulnerabilities-catalog.xml - not an RSS feed
       - https://www.cisa.gov/news.xml
       - https://security.googleblog.com/feeds/posts/default
-      - https://aws.amazon.com/security/security-bulletins/rss.xml
+      - https://blog.talosintelligence.com/rss/
+      # REMOVED: https://aws.amazon.com/security/security-bulletins/rss.xml - feed no longer available
 
   # -------------------------------------------------
   # SECURITY — GENERAL (analysis & reporting)
@@ -107,14 +114,22 @@ feeds:
     rss:
       - https://cloud.google.com/blog/topics/threat-intelligence/rss.xml
       - https://azure.microsoft.com/en-us/blog/topics/security/feed/
-      - https://www.aquasec.com/blog/feed/
-      - https://www.snyk.io/blog/rss/
+      # REMOVED: https://www.aquasec.com/blog/feed/ - feed no longer available
+      - https://www.snyk.io/blog/feed/
       - https://www.tenable.com/blog/feed
       - https://www.rapid7.com/blog/rss/
       - https://unit42.paloaltonetworks.com/feed/
       - https://krebsonsecurity.com/feed/
       - https://www.bleepingcomputer.com/feed/
       - https://therecord.media/feed/
+      - https://feeds.feedburner.com/TheHackersNews
+      - https://threatpost.com/feed/
+      - https://www.schneier.com/feed/atom/
+      - https://www.malwarebytes.com/blog/feed
+      - https://www.darkreading.com/rss.xml
+      - https://news.sophos.com/en-us/feed/
+      - https://danielmiessler.com/feed/
+      - https://blog.sucuri.net/feed
 
 # -------------------------------------------------
 # CRAWL-ONLY SOURCES (NO RSS)
@@ -123,14 +138,14 @@ crawl_sources:
   weight: 1
   description: "Reference & context reservoirs"
   urls:
-    - https://www.perplexity.ai/discover
+    # REMOVED: https://www.perplexity.ai/discover - blocks automated requests (403)
     - https://www.anthropic.com/news
     - https://deepmind.google/research
     - https://www.anthropic.com/research
-    - https://cloud.google.com/architecture/
+    - https://docs.cloud.google.com/architecture
     - https://aws.amazon.com/architecture/
     - https://learn.microsoft.com/en-us/azure/architecture/
     - https://nvd.nist.gov/vuln
     - https://attack.mitre.org/
-    - https://www.cisa.gov/alerts
+    - https://www.cisa.gov/news-events/cybersecurity-advisories
 
